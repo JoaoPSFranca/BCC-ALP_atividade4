@@ -153,8 +153,6 @@ int menuGeral(){
     return opt;
 }
 
-void teste(){}
-
 int main(){
     int opt;
 
