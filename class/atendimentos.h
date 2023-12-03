@@ -76,20 +76,19 @@ Atendimento lerAtendimento(){
 
     } while (verificarProntuario == -1);
 
-        printf(" Problema: ");
-        fflush(stdin);
-        fgets(atendimento.problema, 60, stdin);
-        atendimento.problema[strcspn(atendimento.problema, "\n")] = '\0';
+    printf(" Problema: ");
+    fflush(stdin);
+    fgets(atendimento.problema, 60, stdin);
+    atendimento.problema[strcspn(atendimento.problema, "\n")] = '\0';
 
-        printf(" Solucao: ");
-        fflush(stdin);
-        fgets(atendimento.solucao, 60, stdin);
-        atendimento.solucao[strcspn(atendimento.solucao, "\n")] = '\0';
+    printf(" Solucao: ");
+    fflush(stdin);
+    fgets(atendimento.solucao, 60, stdin);
+    atendimento.solucao[strcspn(atendimento.solucao, "\n")] = '\0';
 
-        atendimento.situ = 'P';
+    atendimento.situ = 'P';
 
-    
-    alterarSituacaoEquipamento(posicao);
+    alterarSituacaoEquipamento(posicao, 0);
     
     return atendimento;
 }
@@ -106,6 +105,8 @@ void incluirAtendimento(Atendimento at){
     else{
         fwrite(&at, sizeof(Atendimento), 1, file);//fwrite grava o tecnico no final do arquivo
         printf("\nAtendimendo cadastrado com sucesso!\n");
+
+
         fclose(file);
     }
 }
@@ -182,13 +183,14 @@ void atendimentoTecnico(){
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoTecnico.\n");
     else{
+
         pront = pegarPront();
 
         fread(&a, sizeof(Atendimento), 1, file);
         while(!feof(file)){
             if(a.pront_tec == pront)
                 imprimirAtendimento(a);
-
+            else
             fread(&a, sizeof(Atendimento), 1, file);
         }
 
@@ -208,6 +210,11 @@ void atendimentoLab(){
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoLab.\n");
     else{
+
+        printf("\n====================== Laboratorios ==================");
+        imprimirLaboratorios();
+        printf("\n======================================================\n");
+
         do{
             do {
                 printf("\n Insira o laboratorio que deseja procurar: ");
@@ -244,3 +251,198 @@ void atendimentoLab(){
         fclose(file);
     }
 }
+
+int verificarCodigoEquipamento(){
+    int
+        codigo = 0,
+        cont = 0,
+        verificar = 0;
+
+    printf("\n====================== Equipamentos ==================");
+    imprimirCodigoEquipamento();
+    printf("\n======================================================\n");
+
+    do
+    {
+        do
+        {
+            printf("\n Insira o Equipamento que deseja procurar: ");
+            scanf("%d", &codigo);
+
+            if (codigo < 0)
+                printf("\n Equipamento invalido! Digite um numero positivo.\n");
+        } while (codigo < 0);
+
+        verificar = getCodigoEquipamento(codigo);
+
+        if (verificar == -1)
+            printf("\n Equipamento invalido! Digite um laboratorio existente.\n");
+    } while (verificar == -1);
+
+    return codigo;
+}
+//Apresentar um histórico de atendimento para um determinado equipamento;
+void atendimentoEquipamento(){
+    FILE *file;
+    Atendimento a;
+    int codigo, 
+        cont = 0;
+
+    file = fopen("atendimentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoEquipamento.\n");
+    else{
+
+        codigo = verificarCodigoEquipamento();
+        fread(&a, sizeof(Atendimento), 1, file);
+        while(!feof(file)){
+            int posicao = localizarEquipamento(a.cod_equip);
+            Equipamento e = getEquipamento(posicao);
+            
+            if(e.num == codigo){
+                imprimirAtendimento(a);
+                cont++;
+            }
+
+            fread(&a, sizeof(Atendimento), 1, file);
+        }
+    
+        if (cont == 0)
+            printf("\nNenhum chamado realizado no equipamento especificado. \n");
+        else
+            printf("\nQuantidade de atendimentos deste equipamento: %d.\n", cont);
+
+        fclose(file);
+    }
+}
+
+//Apresentar as manutenções realizadas em um determinado mês;
+void manutencaoMes(){
+    int mes = 0;
+    do
+    {
+        printf("\n Insira o mes que deseja procurar: ");
+        scanf("%d", &mes);
+
+        if (mes < 1 || mes > 12)
+            printf("\nMes invalido! Tente novamente.\n");
+    } while (mes < 1 || mes > 12);
+
+    verificarMes(mes);
+}
+
+void verificarMes(int mes){
+    FILE *file;
+    Atendimento a;
+    int verifica = 0;
+
+    file = fopen("atendimentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em verificarMes.\n");
+    else
+    {
+        fread(&a, sizeof(Atendimento), 1, file);
+        while(!feof(file))
+        {
+            if(a.mes == mes){
+                imprimirAtendimento(a);
+                verifica = 1;
+            }
+            
+            fread(&a, sizeof(Atendimento), 1, file);
+        }
+        if(verifica == 0)
+            printf("\n Nenhum chamado realizado no mes especificado. \n");
+            
+        fclose(file);
+    }
+}
+
+void finalizarAtendimento()
+{
+    FILE *file;
+    Atendimento a;
+    int codigo = 0,
+        verifica = 0, 
+        mes,
+        dia;
+
+    file = fopen("atendimentos.dat", "rb");
+    if (file == NULL)
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em totalManutencaoEquipamentos.\n");
+    else
+    {
+        codigo = verificarCodigoEquipamento();
+        fread(&a, sizeof(Atendimento), 1, file);
+        if (a.cod_equip == codigo)
+        {
+            apresentarEquipamentoManutencao();
+            fclose(file);
+        }
+
+        printf("\n A seguir, digite as inforcoes do atendimento que deseja finalizar: ");
+        do
+        {
+            printf("\n Dia: ");
+            scanf("%d", &dia);
+
+            if (dia < 1 || dia > 31)
+                printf("\nDia invalido! Tente novamente.\n");
+        } while (dia < 1 || dia > 31);
+
+        do
+        {
+            printf(" Mes: ");
+            scanf("%d", &mes);
+
+            if (mes < 1 || mes > 12)
+                printf("\nMes invalido! Tente novamente.\n");
+        } while (mes < 1 || mes > 12);
+
+     fread(&a, sizeof(Atendimento), 1, file);
+        while(!feof(file))
+        {
+            if(a.dia == dia && a.mes == mes){
+                a.situ == 'F';
+                verifica = 1;
+            }
+            
+            fread(&a, sizeof(Atendimento), 1, file);
+        }
+        int posicao = localizarEquipamento(codigo);
+        alterarSituacaoEquipamento(posicao, 1);
+        if(verifica == 0)
+            printf("\n Nenhum chamado realizado no mes especificado. \n");
+
+        fclose(file);
+    }
+}
+
+//(Desafio) Apresentar o total de manutenções para cada um dos equipamentos
+/*void totalManutencaoEquipamentos(Atendimento a, int num_equi){
+    FILE *file;
+    int 
+        total = 0,
+        cont = 0;
+
+    file = fopen("atendimentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em totalManutencaoEquipamentos.\n");
+    else{
+
+        fread(&a, sizeof(Atendimento), 1, file);
+        while (!feof(file))
+        {
+            if (a.cod_equip == getCodigoEquipamento(num_equi))
+            {
+                if(a.situ == 'M'){
+                    total++;
+                }  
+            }
+            fread(&a, sizeof(Atendimento), 1, file);
+        }
+         fclose(file);
+    }
+}*/
+
+
