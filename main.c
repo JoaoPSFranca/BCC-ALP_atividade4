@@ -4,6 +4,8 @@
 #include "./class/tecnicos.h"
 #include "./class/atendimentos.h"
 
+
+//teste
 void switchEquipamento(int op, Equipamento *e){
     switch(op){
         case 0:
@@ -19,7 +21,7 @@ void switchEquipamento(int op, Equipamento *e){
                 todosEquipamentos();
             break;
         default:
-            printf("\nFavor inserir uma opcao valida. \n");
+            printf("\n Por favor inserir uma opcao valida. \n");
             break;
         
     }
@@ -40,7 +42,7 @@ void switchTecnico(int op, Tecnico *t){
                 todosTecnicos();
             break;
         default:
-            printf("\nFavor inserir uma opcao valida. \n");
+            printf("\n Por favor inserir uma opcao valida. \n");
             break;
     }
 }
@@ -76,7 +78,7 @@ void switchAtendimento(int op, Atendimento *a){
                 atendimentoLab();
             break;
         default:
-            printf("\nFavor inserir uma opcao valida. \n");
+            printf("\n Por favor inserir uma opcao valida. \n");
             break;
     }
 }
