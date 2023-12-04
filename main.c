@@ -4,32 +4,6 @@
 #include "./class/tecnicos.h"
 #include "./class/atendimentos.h"
 
-void switchEquipamento(int op, Equipamento *e){
-    switch(op) {
-        case 0:
-            break;
-        case 1:
-            *e = lerEquipamento(0);
-            incluirEquipamento(*e);
-            break;
-        case 2:
-            if (sizeof(Equipamento) == 0)
-                printf("\nPor favor inserir um Equipamento antes. ");
-            else
-                todosEquipamentos();
-            break;
-        case 3:
-            if (sizeof(Equipamento) == 0)
-                printf("\nPor favor inserir um Equipamento antes. ");
-            else
-                apresentarEquipamentoManutencao();
-            break;
-        default:
-            printf("\n Por favor inserir uma opcao valida. \n");
-            break;
-    }
-}
-
 void switchTecnico(int op, Tecnico *t){
     switch(op) {
         case 0:
@@ -50,17 +24,62 @@ void switchTecnico(int op, Tecnico *t){
     }
 }
 
-void switchAtendimento(int op, Atendimento *a){
+void switchEquipamento(int op, Equipamento *e){
+    int temEquip;
+
     switch(op) {
         case 0:
             break;
         case 1:
-            if (sizeof(Tecnico) != 0 && sizeof(Equipamento) != 0) {
-                *a = lerAtendimento(0);
-                incluirAtendimento(*a);
-            }
+            *e = lerEquipamento();
+            incluirEquipamento(*e);
+            break;
+        case 2:
+            if (sizeof(Equipamento) == 0)
+                printf("\nPor favor inserir um Equipamento antes. ");
             else
-                printf("\nPor favor adicionar pelo menos um Tecnico e Equipamento antes. ");
+                todosEquipamentos();
+            break;
+        case 3:
+            temEquip = verificarTemEquip('M');
+            
+            if (temEquip == 1)
+            {
+                if (sizeof(Equipamento) == 0)
+                    printf("\nPor favor inserir um Equipamento antes. ");
+                else
+                    apresentarEquipamentoManutencao();
+            }
+            break;
+        case 4:
+            if (sizeof(Equipamento) == 0)
+                printf("\nPor favor inserir um Equipamento antes. ");
+            else
+                totalManutencaoEquipamentos();
+            break;
+        default:
+            printf("\n Por favor inserir uma opcao valida. \n");
+            break;
+    }
+}
+
+void switchAtendimento(int op, Atendimento *a){
+    int temEquip;
+
+    switch(op) {
+        case 0:
+            break;
+        case 1:
+            temEquip = verificarTemEquip('F');
+
+            if (temEquip == 1) {
+                if (sizeof(Tecnico) != 0 && sizeof(Equipamento) != 0) {
+                    *a = lerAtendimento(0);
+                    incluirAtendimento(*a);
+                }
+                else
+                    printf("\nPor favor adicionar pelo menos um Tecnico e Equipamento antes. ");
+            }
             break;
         case 2:
             if (sizeof(Atendimento) == 0)
@@ -93,33 +112,19 @@ void switchAtendimento(int op, Atendimento *a){
                 manutencaoMes();
             break;
         case 7:
-            if (sizeof(Atendimento) == 0)
-                printf("\nNenhum atendimento cadastrado. ");
-            else
-               finalizarAtendimento();
+            temEquip = verificarTemEquip('M');
+
+            if (temEquip == 1) {
+                if (sizeof(Atendimento) == 0)
+                    printf("\nNenhum atendimento cadastrado. ");
+                else
+                    finalizarAtendimento();
+            }
             break;
         default:
             printf("\n Por favor inserir uma opcao valida. \n");
             break;
     }
-}
-
-void menuEquipamentos(Equipamento *e){
-    int op;
-
-    do {
-        printf("\n==================== Equipamentos ====================");
-        printf("\n [1] - Incluir novo equipamento. ");
-        printf("\n [2] - Apresentar todos os equipamentos. ");
-        printf("\n [3] - Apresentar todos os equipamentos em manutencao. ");
-        printf("\n [0] - Voltar. ");
-        printf("\n======================================================\n");
-
-        printf("\n Insira a opcao desejada: ");
-        scanf("%d", &op);
-
-        switchEquipamento(op, e);
-    } while(op != 0);
 }
 
 void menuTecnicos(Tecnico *t){
@@ -138,6 +143,25 @@ void menuTecnicos(Tecnico *t){
         switchTecnico(op, t);
 
     } while (op != 0);
+}
+
+void menuEquipamentos(Equipamento *e){
+    int op;
+
+    do {
+        printf("\n==================== Equipamentos ====================");
+        printf("\n [1] - Incluir novo equipamento. ");
+        printf("\n [2] - Apresentar todos os equipamentos. ");
+        printf("\n [3] - Apresentar todos os equipamentos em manutencao. ");
+        printf("\n [4] - Apresentar total de manutencoes de cada equipamento. ");
+        printf("\n [0] - Voltar. ");
+        printf("\n======================================================\n");
+
+        printf("\n Insira a opcao desejada: ");
+        scanf("%d", &op);
+
+        switchEquipamento(op, e);
+    } while(op != 0);
 }
 
 void menuAtendimentos(Atendimento *a){
@@ -167,8 +191,8 @@ int menuGeral(){
     int opt;
 
     printf("\n=============== Sistema de Manutencao ================");
-    printf("\n [1] - Equipamentos");
-    printf("\n [2] - Tecnicos");
+    printf("\n [1] - Tecnicos");
+    printf("\n [2] - Equipamentos");
     printf("\n [3] - Atendimentos");
     printf("\n [0] - Sair");
     printf("\n======================================================\n");
@@ -193,10 +217,10 @@ int main(){
             case 0:
                 break;
             case 1:
-                menuEquipamentos(&e);
+                menuTecnicos(&t);
                 break;
             case 2:
-                menuTecnicos(&t);
+                menuEquipamentos(&e);
                 break;
             case 3:
                 menuAtendimentos(&a);

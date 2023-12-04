@@ -39,19 +39,29 @@ Atendimento lerAtendimento(){
 
     do {
         do {
-            printf(" Equipamento: ");
+            apresentarEquipamentoFuncionando();
+
+            printf("\n Equipamento: ");
             scanf("%d", &nr_equipamento);
 
             if (nr_equipamento < 0)
                 printf("\n Codigo invalido! tente novamente.\n");
         } while (nr_equipamento < 0);
 
-        verificarCodigo = localizarEquipamento(nr_equipamento);
-        if(verificarCodigo != -1)
-            atendimento.cod_equip = nr_equipamento;
-
         posicao = localizarEquipamento(nr_equipamento);
-    } while (verificarCodigo == -1);
+
+        if (posicao != -1) {
+            verificarCodigo = verificarSituacaoEquipamento(posicao);
+            if(verificarCodigo == 0)
+                atendimento.cod_equip = nr_equipamento;
+            else
+                printf("\n O equipamento ja esta em manutencao! Escolha outro.\n");
+        }
+        else {
+            verificarCodigo = 1;
+            printf("\n Codigo invalido! Escolha um equipamento existente.\n");
+        }
+    } while (verificarCodigo == 1);
 
     printf("\n================ Tecnicos Disponiveis ================");
         imprimirProntuario();
@@ -335,7 +345,7 @@ void verificarMes(int mes){
 
 //Apresentar as manutenções realizadas em um determinado mês;
 void manutencaoMes(){
-    int mes = 0, cont = 0;
+    int mes = 0;
 
     do {
         printf("\n Insira o mes que deseja procurar: ");
@@ -428,12 +438,10 @@ void apresentarEquipamentoManutencao(){
 
 int verificarCodigoEquipamentoManutencao(){
     int
-        codigo = 0,
+        codigo = -1,
         verificar = 0;
 
-    printf("\n============= Equipamentos em manutencao =============");
     imprimirCodigoEquipamentoManutencao();
-    printf("\n======================================================\n");
 
     do {
         do {
@@ -507,79 +515,55 @@ void finalizarAtendimento() {
     else {
         codigo = verificarCodigoEquipamentoManutencao();
 
-        posicao = localizarEquipamento(codigo);
-        e = getEquipamento(posicao);
+        if (codigo != -1)
+        {
+            posicao = localizarEquipamento(codigo);
+            e = getEquipamento(posicao);
 
-        posicao = localizarAtendimentoPendente(e.num);
-        a = getAtendimento(posicao);
-        
-        imprimirEquipamentosManutencao(e, a);
+            posicao = localizarAtendimentoPendente(e.num);
+            a = getAtendimento(posicao);
+            
+            imprimirEquipamentosManutencao(e, a);
 
-        printf("\n A seguir, digite as informacoes do atendimento que deseja finalizar: ");
-        do {
-            printf("\n Dia: ");
-            scanf("%d", &dia);
+            printf("\n A seguir, digite as informacoes do atendimento que deseja finalizar: ");
+            do {
+                printf("\n Dia: ");
+                scanf("%d", &dia);
 
-            if (dia < 1 || dia > 31)
-                printf("\nDia invalido! Tente novamente.\n");
-        } while (dia < 1 || dia > 31);
+                if (dia < 1 || dia > 31)
+                    printf("\nDia invalido! Tente novamente.\n");
+            } while (dia < 1 || dia > 31);
 
-        do {
-            printf(" Mes: ");
-            scanf("%d", &mes);
+            do {
+                printf(" Mes: ");
+                scanf("%d", &mes);
 
-            if (mes < 1 || mes > 12)
-                printf("\nMes invalido! Tente novamente.\n");
-        } while (mes < 1 || mes > 12);
+                if (mes < 1 || mes > 12)
+                    printf("\nMes invalido! Tente novamente.\n");
+            } while (mes < 1 || mes > 12);
 
-        fread(&a, sizeof(Atendimento), 1, file);
-        while(!feof(file) && verifica == 0) {
-            if(a.dia == dia && a.mes == mes && codigo == a.cod_equip){
-                int resp = verificarResposta();
-
-                if (resp == 1) {
-                    posicao = localizarEquipamento(codigo);
-                    alterarSituacaoEquipamento(posicao, 1);
-                    posicao = localizarAtendimentoPendente(codigo);
-                    alterarSituacaoAtendimento(posicao);
-                    printf("\nChamado Finalizado com sucesso. \n");
-                }
-
-                verifica = 1;
-            }
             fread(&a, sizeof(Atendimento), 1, file);
-        }
+            while(!feof(file) && verifica == 0) {
+                if(a.dia == dia && a.mes == mes && codigo == a.cod_equip){
+                    int resp = verificarResposta();
 
-        if(verifica == 0)
-            printf("\n Nenhum chamado realizado com os dados especificados. \n");
+                    if (resp == 1) {
+                        posicao = localizarEquipamento(codigo);
+                        alterarSituacaoEquipamento(posicao, 1);
+                        posicao = localizarAtendimentoPendente(codigo);
+                        alterarSituacaoAtendimento(posicao);
+                        printf("\nChamado Finalizado com sucesso. \n");
+                    }
+
+                    verifica = 1;
+                }
+                fread(&a, sizeof(Atendimento), 1, file);
+            }
+
+            if(verifica == 0)
+                printf("\n Nenhum chamado realizado com os dados especificados. \n");
+        }
 
         fclose(file);
     }
 }
-
-//(Desafio) Apresentar o total de manutenções para cada um dos equipamentos
-/*void totalManutencaoEquipamentos(Atendimento a, int num_equi){
-    FILE *file;
-    int 
-        total = 0,
-        cont = 0;
-
-    file = fopen("atendimentos.dat", "rb");
-    if(file == NULL)
-        printf("\nNao foi possivel abrir 'atendimentos.dat' em totalManutencaoEquipamentos.\n");
-    else{
-
-        fread(&a, sizeof(Atendimento), 1, file);
-        while (!feof(file))
-        {
-            if (a.cod_equip == getCodigoEquipamento(num_equi))
-            {
-                if(a.situ == 'M'){
-                    total++;
-                }  
-            }
-            fread(&a, sizeof(Atendimento), 1, file);
-        }
-         fclose(file);
-    }
-}*/
