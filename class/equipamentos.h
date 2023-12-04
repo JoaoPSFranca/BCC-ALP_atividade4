@@ -21,7 +21,7 @@ Equipamento lerEquipamento(int num){
         printf("%d\n", num);
         equipamento.num = num;
     }
-    else{
+    else {
         scanf("%d", &equipamento.num);
 
         printf(" Descricao: ");
@@ -29,23 +29,23 @@ Equipamento lerEquipamento(int num){
         fgets(equipamento.descricao, 60, stdin);
         equipamento.descricao[strcspn(equipamento.descricao, "\n")] = '\0';
 
-        do{
+        do {
               printf(" Num. Laboratorio: ");
               scanf("%d", &equipamento.num_lab);
 
               if(equipamento.num_lab <= 0)
               printf("\n Numero invalido! digite um numero positivo. \n");
 
-        }while (equipamento.num_lab <= 0);
+        } while (equipamento.num_lab <= 0);
 
-        do{
+        do {
              printf(" Num. Maquina: ");
              scanf("%d", &equipamento.num_maqna);
 
              if(equipamento.num_maqna <= 0)
              printf("\n Numero invalido! digite um numero positivo.\n");
 
-        }while(equipamento.num_maqna <= 0);
+        } while(equipamento.num_maqna <= 0);
 
         equipamento.situacao = 'F'; // funcionando
     }
@@ -61,7 +61,7 @@ void incluirEquipamento(Equipamento equipamento){
 
     if (file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em incluirEquipamento.\n");
-    else{
+    else {
         fwrite(&equipamento, sizeof(Equipamento), 1, file);//fwrite grava o eqpamento no final do arquivo
         fclose(file);
     }
@@ -89,11 +89,9 @@ void todosEquipamentos(){
     file = fopen("equipamentos.dat", "rb");// ler arquivo binario
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em todosEquipamentos.\n");
-    else
-    {
+    else {
         fread(&e, sizeof(Equipamento), 1, file);
-        while(!feof(file))
-        {
+        while(!feof(file)) {
             imprimirEquipamentos(e);
             fread(&e, sizeof(Equipamento), 1, file);
         }
@@ -110,14 +108,12 @@ int localizarEquipamento(int codigo){
     file = fopen("equipamentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em localizarEquipamento.\n");
-    else
-    {
+    else {
         fread(&e, sizeof(Equipamento), 1, file);
 
         // no while eu verifico se nao chegou ao fim do arquivo
         // e tambem nao encontrou
-        while(!feof(file) && posicao == -1)
-        {
+        while(!feof(file) && posicao == -1) {
             if (e.num == codigo)
                 posicao = i;
             else {
@@ -125,7 +121,6 @@ int localizarEquipamento(int codigo){
                 fread(&e, sizeof(Equipamento), 1, file);
             }
         }
-
     }
     return posicao;
 }
@@ -137,8 +132,7 @@ Equipamento getEquipamento(int posicao){
     file = fopen("equipamentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em getEquipamento.\n");
-    else
-    {
+    else {
         // parametros
         // 1 - identificador do arquivo
         // 2 - quantas posicoes vou deslocar
@@ -150,7 +144,6 @@ Equipamento getEquipamento(int posicao){
         fread(&e, sizeof(Equipamento), 1, file);
         fclose(file);
     }
-
     return e;
 }
 
@@ -162,16 +155,13 @@ int getCodigoEquipamento(int codigo){
     file = fopen("equipamentos.dat", "rb");
     if (file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em getCodigoEquipamento.\n");
-    else
-    {
+    else {
         posicao = localizarEquipamento(codigo);
-        if (posicao == -1)
-        {
+        if (posicao == -1) {
             printf("\nNao ha equipamento com esse codigo. \n");
             return posicao;
         }
-        else
-        {
+        else {
             e = getEquipamento(posicao);
 
             // posiciono no registro correto
@@ -187,19 +177,16 @@ int getCodigoEquipamento(int codigo){
 }
 
 void sobreescreverSituacaoEquipamento(Equipamento e, int posicao){
-
     FILE *file;
 
     file = fopen("equipamentos.dat", "rb+");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em sobreescreverSituacaoEquipamento.\n");
-    else
-    {
+    else {
         fseek(file, posicao*sizeof(Equipamento) , SEEK_SET);
         fwrite(&e, sizeof(Equipamento), 1, file);
         fclose(file);
     }
-
 }
 
 void alterarSituacaoEquipamento(int posicao, int codigo){
@@ -209,8 +196,7 @@ void alterarSituacaoEquipamento(int posicao, int codigo){
     file = fopen("equipamentos.dat", "rb+");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em alterarSituacaoEquipamento.\n");
-    else
-    {
+    else {
         // posiciono no registro correto
         fseek(file, posicao*sizeof(Equipamento) , SEEK_SET);
 
@@ -218,12 +204,14 @@ void alterarSituacaoEquipamento(int posicao, int codigo){
         fread(&e, sizeof(Equipamento), 1, file);
 
         // mudando situacao do equipamento
-        if(codigo == 0)
+        if(codigo == 0) {
             e.situacao = 'M';
             printf("\nA situacao do equipamento foi modificada para 'MANUTENCAO'");
-        else
+        }
+        else {
             e.situacao = 'F';
             printf("\nA situacao do equipamento foi modificada para 'FUNCIONANDO'");
+        }
 
         // reposiciono no registro correto
         fseek(file, posicao*sizeof(Equipamento), SEEK_SET);
@@ -242,18 +230,14 @@ void imprimirLaboratorios(){
     file = fopen("equipamentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirLaboratorios.\n");
-    else
-    {
+    else {
         fread(&e, sizeof(Equipamento), 1, file);
-        while(!feof(file))
-        {
-            if(fread(&e, sizeof(Equipamento), 1, file) != (fread(&e, sizeof(Equipamento), 1, file)+1)){
+        while(!feof(file)) {
+            if(fread(&e, sizeof(Equipamento), 1, file) != (fread(&e, sizeof(Equipamento), 1, file)+1)) {
                 printf("\n Num. Laboratorio: %d", e.num_lab);
-            }
-            
+            }       
             fread(&e, sizeof(Equipamento), 1, file);
         }
-
         fclose(file);
     }
 }
@@ -266,47 +250,17 @@ int verificarLaboratorios(int lab){
     file = fopen("equipamentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em verificarLaboratorios.\n");
-    else{
-
+    else {
         fread(&e, sizeof(Equipamento), 1, file);
 
-        while(!feof(file) && verificar == 0)
-        {
+        while(!feof(file) && verificar == 0) {
             if (e.num_lab == lab)
                 verificar = 1;
             else
                 fread(&e, sizeof(Equipamento), 1, file);
         }
     }
-
     return verificar;
-}
-
-void apresentarEquipamentoManutencao(){
-    FILE *file;
-    Equipamento e;
-    int verifica;
-
-    file = fopen("equipamentos.dat", "rb");
-    if(file == NULL)
-        printf("\nNao foi possivel abrir 'equipamentos.dat' em apresentarEquipamentoManutencao.\n");
-    else
-    {
-        fread(&e, sizeof(Equipamento), 1, file);
-        while(!feof(file))
-        {
-            if(e.situacao == 'M'){
-                imprimirEquipamentos(e);
-                verifica = 1;
-            }
-            
-            if (verifica == 0)
-                printf("\n Nenhum chamado realizado no mes especificado. \n");
-            fread(&e, sizeof(Equipamento), 1, file);
-        }
-
-        fclose(file);
-    }
 }
 
 void imprimirCodigoEquipamento(){
@@ -315,18 +269,32 @@ void imprimirCodigoEquipamento(){
 
     file = fopen("equipamentos.dat", "rb");
     if(file == NULL)
-        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirEquipamentoManutencao.\n");
-    else
-    {
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirCodigoEquipamento.\n");
+    else {
         fread(&e, sizeof(Equipamento), 1, file);
-        while(!feof(file))
-        {
-            
+        while(!feof(file)) {
             printf("\n Numero do Equipamento: %d  ", e.num);
-            
             fread(&e, sizeof(Equipamento), 1, file);
         }
+        fclose(file);
+    }
+}
 
+void imprimirCodigoEquipamentoManutencao(){
+    FILE *file;
+    Equipamento e;
+
+    file = fopen("equipamentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirCodigoEquipamentoManutencao.\n");
+    else {
+        fread(&e, sizeof(Equipamento), 1, file);
+        while(!feof(file)) {
+            if (e.situacao == 'M')
+                printf("\n Numero do Equipamento: %d  ", e.num);
+
+            fread(&e, sizeof(Equipamento), 1, file);
+        }
         fclose(file);
     }
 }

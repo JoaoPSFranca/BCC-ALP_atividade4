@@ -4,10 +4,8 @@
 #include "./class/tecnicos.h"
 #include "./class/atendimentos.h"
 
-
-//teste
 void switchEquipamento(int op, Equipamento *e){
-    switch(op){
+    switch(op) {
         case 0:
             break;
         case 1:
@@ -29,12 +27,11 @@ void switchEquipamento(int op, Equipamento *e){
         default:
             printf("\n Por favor inserir uma opcao valida. \n");
             break;
-        
     }
 }
 
 void switchTecnico(int op, Tecnico *t){
-    switch(op){
+    switch(op) {
         case 0:
             break;
         case 1:
@@ -54,7 +51,7 @@ void switchTecnico(int op, Tecnico *t){
 }
 
 void switchAtendimento(int op, Atendimento *a){
-    switch(op){
+    switch(op) {
         case 0:
             break;
         case 1:
@@ -110,7 +107,7 @@ void switchAtendimento(int op, Atendimento *a){
 void menuEquipamentos(Equipamento *e){
     int op;
 
-    do{
+    do {
         printf("\n==================== Equipamentos ====================");
         printf("\n [1] - Incluir novo equipamento. ");
         printf("\n [2] - Apresentar todos os equipamentos. ");
@@ -123,13 +120,12 @@ void menuEquipamentos(Equipamento *e){
 
         switchEquipamento(op, e);
     } while(op != 0);
-
 }
 
 void menuTecnicos(Tecnico *t){
     int op;
 
-    do{
+    do {
         printf("\n==================== Tecnicos ======================");
         printf("\n [1] - Incluir novo tecnico. ");
         printf("\n [2] - Apresentar todos os tecnicos. ");
@@ -147,8 +143,8 @@ void menuTecnicos(Tecnico *t){
 void menuAtendimentos(Atendimento *a){
     int op;
 
-    do{
-        printf("\n=================== Atendimentos ====================");
+    do {
+        printf("\n==================== Atendimentos ====================");
         printf("\n [1] - Abrir chamado de atendimento. ");
         printf("\n [2] - Apresentar todos os chamados. ");
         printf("\n [3] - Apresentar chamados de um tecnico especifico. ");
@@ -157,7 +153,7 @@ void menuAtendimentos(Atendimento *a){
         printf("\n [6] - Apresentar chamados de um mes especifico. ");
         printf("\n [7] - Finalizar chamados de um equipamento especifico. ");
         printf("\n [0] - Voltar. ");
-        printf("\n=====================================================\n");
+        printf("\n======================================================\n");
 
         printf("\n Insira a opcao desejada: ");
         scanf("%d", &op);
@@ -190,7 +186,7 @@ int main(){
     Tecnico t;
     Atendimento a;
 
-    do{
+    do {
         opt = menuGeral();
         
         switch (opt) {
