@@ -8,52 +8,6 @@ typedef struct {
     int ramal;
 } Tecnico;
 
-Tecnico lerTecnico(int codigo){
-    Tecnico tecnico;
-
-    printf("\nA seguir, insira as informacoes para cadastrar um tecnico: \n");
-
-    printf("\n Prontuario: ");
-    if (codigo != 0) {
-        printf("%d\n", codigo);
-        tecnico.pront = codigo;
-    }
-    else {
-        scanf("%d", &tecnico.pront);
-
-        printf(" Nome: ");
-        fflush(stdin);
-        fgets(tecnico.nome, 60, stdin);
-        tecnico.nome[strcspn(tecnico.nome, "\n")] = '\0';
-
-        do {
-            printf(" Ramal: ");
-            scanf("%d", &tecnico.ramal);
-
-            if (tecnico.ramal <= 0)
-                printf("\nNumero invalido! digite um numero positivo.\n");
-
-        } while (tecnico.ramal <= 0);
-    }
-    return tecnico;
-}
-
-void incluirTecnico(Tecnico tecnico){
-    FILE *file;
-
-    file = fopen("tecnicos.dat", "ab");//ab incluir arquivo binario
-
-    if (file == NULL)
-       file = fopen("tecnicos.dat", "wb"); // whrite binary archive
-
-    if (file == NULL)
-        printf("\nNao foi possivel abrir 'tecnicos.dat' em incluirTecnico.\n");
-    else {
-        fwrite(&tecnico, sizeof(Tecnico), 1, file);//fwrite grava o tecnico no final do arquivo
-        fclose(file);
-    }
-}
-
 int localizarTecnico(int pront){
     FILE *file;
     Tecnico t;
@@ -77,6 +31,102 @@ int localizarTecnico(int pront){
         }
     }
     return posicao;
+}
+
+int localizarRamal(int ramal){
+    FILE *file;
+    Tecnico t;
+    int posicao = -1, i = 0;
+
+    file = fopen("tecnicos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'tecnicos.dat' em localizarRamal.\n");
+    else {
+        fread(&t, sizeof(Tecnico), 1, file);
+
+        while(!feof(file) && posicao == -1) {
+            if (t.ramal == ramal)
+                posicao = i;
+            else {
+                i++;
+                fread(&t, sizeof(Tecnico), 1, file);
+            }
+        }
+    }
+    return posicao;
+}
+
+Tecnico lerTecnico(){
+    int 
+        codigo = 0, 
+        ramal = 0,
+        verificarCodigo = 10, 
+        verificarRamal = 10;
+    Tecnico tecnico;
+
+    printf("\nA seguir, insira as informacoes para cadastrar um tecnico: \n");
+
+    while (verificarCodigo != -1) {
+        do {
+            printf("\n Prontuario: ");
+            scanf("%d", &codigo);
+
+            if(codigo <= 0)
+            printf("\n Numero invalido! Digite um numero maior que 0. \n");
+        } while (codigo <= 0);
+
+        if (sizeof(Tecnico) == 0)
+            verificarCodigo = localizarTecnico(codigo);
+        else
+            verificarCodigo = -1;
+        
+        if (verificarCodigo != -1)
+            printf("Este prontuario ja existe, tente novamente. ");
+    }
+
+    tecnico.pront = codigo;
+
+    printf(" Nome: ");
+    fflush(stdin);
+    fgets(tecnico.nome, 60, stdin);
+    tecnico.nome[strcspn(tecnico.nome, "\n")] = '\0';
+
+    while (verificarRamal != -1) {
+        do {
+            printf(" Ramal: ");
+            scanf("%d", &ramal);
+
+            if(ramal <= 0)
+            printf("\n Numero invalido! Digite um numero maior que 0. \n");
+        } while (ramal <= 0);
+
+        if (sizeof(Tecnico) == 0)
+            verificarRamal = localizarRamal(ramal);
+        else
+            verificarRamal = -1;
+        
+        if (verificarRamal != -1)
+            printf("\n Este ramal ja existe, tente novamente. \n\n");
+    }
+    tecnico.ramal = ramal;
+    
+    return tecnico;
+}
+
+void incluirTecnico(Tecnico tecnico){
+    FILE *file;
+
+    file = fopen("tecnicos.dat", "ab");//ab incluir arquivo binario
+
+    if (file == NULL)
+       file = fopen("tecnicos.dat", "wb"); // whrite binary archive
+
+    if (file == NULL)
+        printf("\nNao foi possivel abrir 'tecnicos.dat' em incluirTecnico.\n");
+    else {
+        fwrite(&tecnico, sizeof(Tecnico), 1, file);//fwrite grava o tecnico no final do arquivo
+        fclose(file);
+    }
 }
 
 Tecnico getTecnico(int posicao){
