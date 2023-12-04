@@ -276,7 +276,7 @@ int verificarCodigoEquipamento(){
         verificar = getCodigoEquipamento(codigo);
 
         if (verificar == -1)
-            printf("\n Equipamento invalido! Digite um laboratorio existente.\n");
+            printf("\n Equipamento invalido! Digite um equipamento existente.\n");
     } while (verificar == -1);
 
     return codigo;
@@ -358,8 +358,7 @@ void verificarMes(int mes){
     }
 }
 
-void finalizarAtendimento()
-{
+void finalizarAtendimento() {
     FILE *file;
     Atendimento a;
     int codigo = 0,
@@ -369,18 +368,19 @@ void finalizarAtendimento()
 
     file = fopen("atendimentos.dat", "rb");
     if (file == NULL)
-        printf("\nNao foi possivel abrir 'atendimentos.dat' em totalManutencaoEquipamentos.\n");
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em finalizarAtendimento.\n");
     else
     {
         codigo = verificarCodigoEquipamento();
+        
         fread(&a, sizeof(Atendimento), 1, file);
-        if (a.cod_equip == codigo)
-        {
+
+        if (a.cod_equip == codigo) {
             apresentarEquipamentoManutencao();
             fclose(file);
         }
 
-        printf("\n A seguir, digite as inforcoes do atendimento que deseja finalizar: ");
+        printf("\n A seguir, digite as informacoes do atendimento que deseja finalizar: ");
         do
         {
             printf("\n Dia: ");

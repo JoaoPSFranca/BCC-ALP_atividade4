@@ -218,12 +218,14 @@ void alterarSituacaoEquipamento(int posicao, int codigo){
         fread(&e, sizeof(Equipamento), 1, file);
 
         // mudando situacao do equipamento
-        if(codigo == 0)
+        if(codigo == 0){
             e.situacao = 'M';
             printf("\nA situacao do equipamento foi modificada para 'MANUTENCAO'");
-        else
+        }
+        else{
             e.situacao = 'F';
             printf("\nA situacao do equipamento foi modificada para 'FUNCIONANDO'");
+        }
 
         // reposiciono no registro correto
         fseek(file, posicao*sizeof(Equipamento), SEEK_SET);
