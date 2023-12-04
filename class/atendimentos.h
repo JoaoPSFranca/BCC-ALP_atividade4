@@ -270,6 +270,7 @@ int verificarCodigoEquipamento(){
 
     return codigo;
 }
+
 //Apresentar um histórico de atendimento para um determinado equipamento;
 void atendimentoEquipamento(){
     FILE *file;
@@ -281,8 +282,8 @@ void atendimentoEquipamento(){
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoEquipamento.\n");
     else {
-
         codigo = verificarCodigoEquipamento();
+
         fread(&a, sizeof(Atendimento), 1, file);
         while(!feof(file)) {
             int posicao = localizarEquipamento(a.cod_equip);
@@ -342,6 +343,85 @@ void manutencaoMes(){
     } while (mes < 1 || mes > 12);
 
     verificarMes(mes);
+}
+
+void imprimirEquipamentosManutencao(Equipamento e, Atendimento a){
+    printf("\n=============== Dados dos Equipamentos ===============");
+
+    printf("\n Numero: %d", e.num);
+    printf("\n Descricao: %s", e.descricao);
+    printf("\n Num. Laboratorio: %d", e.num_lab);
+    printf("\n Num. Maquina: %d", e.num_maqna);
+    if (e.situacao == 'M')
+        printf("\n Situacao: Em manutencao");
+    printf("\n Problema: %s", a.problema);
+    printf("\n Solucao: %s", a.solucao);
+
+    printf("\n======================================================\n");
+}
+
+int localizarAtendimento(int codigo){
+    FILE *file;
+    Atendimento a;
+    int posicao = -1, i = 0;
+
+    file = fopen("atendimentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em localizarAtendimento.\n");
+    else {
+        fread(&a, sizeof(Atendimento), 1, file);
+        while(!feof(file) && posicao == -1) {
+            if (a.cod_equip == codigo)
+                posicao = i;
+            else {
+                i++;
+                fread(&a, sizeof(Equipamento), 1, file);
+            }
+        }
+    }
+    return posicao;
+}
+
+Atendimento getAtendimento(int posicao){
+    FILE *file;
+    Atendimento a;
+
+    file = fopen("atendimentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'atendimentos.dat' em getAtendimento.\n");
+    else {
+        fseek(file, posicao*sizeof(Atendimento), SEEK_SET);
+        fread(&a, sizeof(Atendimento), 1, file);
+        fclose(file);
+    }
+    return a;
+}
+
+void apresentarEquipamentoManutencao(){
+    FILE *file;
+    Equipamento e;
+    int verifica;
+
+    file = fopen("equipamentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em apresentarEquipamentoManutencao.\n");
+    else {
+        fread(&e, sizeof(Equipamento), 1, file);
+        while(!feof(file)) {
+            if(e.situacao == 'M'){
+                int posicao = localizarAtendimento(e.num);
+                Atendimento a = getAtendimento(posicao);
+                imprimirEquipamentosManutencao(e, a);
+                verifica = 1;
+            }
+            
+            if (verifica == 0)
+                printf("\n Nenhum chamado realizado no mes especificado. \n");
+            fread(&e, sizeof(Equipamento), 1, file);
+        }
+
+        fclose(file);
+    }
 }
 
 void finalizarAtendimento() {

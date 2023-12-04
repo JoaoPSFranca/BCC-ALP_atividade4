@@ -263,38 +263,13 @@ int verificarLaboratorios(int lab){
     return verificar;
 }
 
-void apresentarEquipamentoManutencao(){
-    FILE *file;
-    Equipamento e;
-    int verifica;
-
-    file = fopen("equipamentos.dat", "rb");
-    if(file == NULL)
-        printf("\nNao foi possivel abrir 'equipamentos.dat' em apresentarEquipamentoManutencao.\n");
-    else {
-        fread(&e, sizeof(Equipamento), 1, file);
-        while(!feof(file)) {
-            if(e.situacao == 'M'){
-                imprimirEquipamentos(e);
-                verifica = 1;
-            }
-            
-            if (verifica == 0)
-                printf("\n Nenhum chamado realizado no mes especificado. \n");
-            fread(&e, sizeof(Equipamento), 1, file);
-        }
-
-        fclose(file);
-    }
-}
-
 void imprimirCodigoEquipamento(){
     FILE *file;
     Equipamento e;
 
     file = fopen("equipamentos.dat", "rb");
     if(file == NULL)
-        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirEquipamentoManutencao.\n");
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirCodigoEquipamento.\n");
     else {
         fread(&e, sizeof(Equipamento), 1, file);
         while(!feof(file)) {

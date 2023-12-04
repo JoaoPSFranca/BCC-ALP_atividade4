@@ -4,7 +4,6 @@
 #include "./class/tecnicos.h"
 #include "./class/atendimentos.h"
 
-
 //teste
 void switchEquipamento(int op, Equipamento *e){
     switch(op) {
