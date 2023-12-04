@@ -18,7 +18,7 @@ Tecnico lerTecnico(int codigo){
         printf("%d\n", codigo);
         tecnico.pront = codigo;
     }
-    else{
+    else {
         scanf("%d", &tecnico.pront);
 
         printf(" Nome: ");
@@ -26,8 +26,7 @@ Tecnico lerTecnico(int codigo){
         fgets(tecnico.nome, 60, stdin);
         tecnico.nome[strcspn(tecnico.nome, "\n")] = '\0';
 
-        do
-        {
+        do {
             printf(" Ramal: ");
             scanf("%d", &tecnico.ramal);
 
@@ -36,7 +35,6 @@ Tecnico lerTecnico(int codigo){
 
         } while (tecnico.ramal <= 0);
     }
-
     return tecnico;
 }
 
@@ -50,14 +48,13 @@ void incluirTecnico(Tecnico tecnico){
 
     if (file == NULL)
         printf("\nNao foi possivel abrir 'tecnicos.dat' em incluirTecnico.\n");
-    else{
+    else {
         fwrite(&tecnico, sizeof(Tecnico), 1, file);//fwrite grava o tecnico no final do arquivo
         fclose(file);
     }
 }
 
-int localizarTecnico(int pront)
-{
+int localizarTecnico(int pront){
     FILE *file;
     Tecnico t;
     int posicao = -1, i = 0;
@@ -65,14 +62,12 @@ int localizarTecnico(int pront)
     file = fopen("tecnicos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'tecnicos.dat' em localizarTecnico.\n");
-    else
-    {
+    else {
         fread(&t, sizeof(Tecnico), 1, file);
 
         // no while eu verifico se nao chegou ao fim do arquivo
         // e tambem se nao encontrou
-        while(!feof(file) && posicao == -1)
-        {
+        while(!feof(file) && posicao == -1) {
             if (t.pront == pront)
                 posicao = i;
             else {
@@ -80,23 +75,19 @@ int localizarTecnico(int pront)
                 fread(&t, sizeof(Tecnico), 1, file);
             }
         }
-
     }
     return posicao;
 }
 
-Tecnico getTecnico(int posicao)
-{
+Tecnico getTecnico(int posicao){
     FILE *file;
     Tecnico t;
 
     file = fopen("tecnicos.dat", "rb");
-    if(file == NULL)
-    {
+    if(file == NULL) {
         printf("\nNao foi possivel abrir 'tecnicos.dat' em getTecnico.\n");
     }
-    else
-    {
+    else {
         // parametros
         // 1 - identificador do arquivo
         // 2 - quantas posicoes vou deslocar
@@ -108,31 +99,25 @@ Tecnico getTecnico(int posicao)
         fread(&t, sizeof(Tecnico), 1, file);
         fclose(file);
     }
-
     return t;
 }
 
-int getProntuarioTecnico(int pront)
-{
+int getProntuarioTecnico(int pront){
     FILE *file;
     Tecnico t;
     int posicao = 0;
 
     file = fopen("tecnicos.dat", "rb");
-    if (file == NULL)
-    {
+    if (file == NULL) {
         printf("\nNao foi possivel abrir 'tecnicos.dat' em getProntuarioTecnico.\n");
     }
-    else
-    {
+    else {
         posicao = localizarTecnico(pront);
-        if (posicao == -1)
-        {
+        if (posicao == -1) {
             printf("\nNao existe tecnico com este prontuario. \n");
             return posicao;
         }
-        else
-        {
+        else {
             t = getTecnico(posicao);
 
             // posiciono no registro correto
@@ -141,11 +126,9 @@ int getProntuarioTecnico(int pront)
             pront = t.pront;
 
             fclose(file);
-
             return pront;
         }
     }
-
     return -1;
 }
 
@@ -156,11 +139,9 @@ void imprimirProntuario(){
     file = fopen("tecnicos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'tecnicos.dat' em imprimirProntuario.\n");
-    else
-    {
+    else {
         fread(&t, sizeof(Tecnico), 1, file);
-        while(!feof(file))
-        {
+        while(!feof(file)) {
             printf("\n Prontuario: %d   Tecnico: %s", t.pront, t.nome);
             fread(&t, sizeof(Tecnico), 1, file);
         }
@@ -185,15 +166,12 @@ void todosTecnicos(){
     Tecnico t;
 
     file = fopen("tecnicos.dat", "rb");// ler arquivo binario
-    if(file == NULL)
-    {
+    if(file == NULL) {
         printf("\nNao foi possivel abrir 'tecnicos.dat' em todosTecnicos.\n");
     }
-    else
-    {
+    else {
         fread(&t, sizeof(Tecnico), 1, file);
-        while(!feof(file))
-        {
+        while(!feof(file)) {
             imprimirTecnicos(t);
             fread(&t, sizeof(Tecnico), 1, file);
         }

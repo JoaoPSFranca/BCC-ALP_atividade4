@@ -7,7 +7,7 @@
 
 //teste
 void switchEquipamento(int op, Equipamento *e){
-    switch(op){
+    switch(op) {
         case 0:
             break;
         case 1:
@@ -29,12 +29,11 @@ void switchEquipamento(int op, Equipamento *e){
         default:
             printf("\n Por favor inserir uma opcao valida. \n");
             break;
-        
     }
 }
 
 void switchTecnico(int op, Tecnico *t){
-    switch(op){
+    switch(op) {
         case 0:
             break;
         case 1:
@@ -54,7 +53,7 @@ void switchTecnico(int op, Tecnico *t){
 }
 
 void switchAtendimento(int op, Atendimento *a){
-    switch(op){
+    switch(op) {
         case 0:
             break;
         case 1:
@@ -110,7 +109,7 @@ void switchAtendimento(int op, Atendimento *a){
 void menuEquipamentos(Equipamento *e){
     int op;
 
-    do{
+    do {
         printf("\n==================== Equipamentos ====================");
         printf("\n [1] - Incluir novo equipamento. ");
         printf("\n [2] - Apresentar todos os equipamentos. ");
@@ -123,13 +122,12 @@ void menuEquipamentos(Equipamento *e){
 
         switchEquipamento(op, e);
     } while(op != 0);
-
 }
 
 void menuTecnicos(Tecnico *t){
     int op;
 
-    do{
+    do {
         printf("\n==================== Tecnicos ======================");
         printf("\n [1] - Incluir novo tecnico. ");
         printf("\n [2] - Apresentar todos os tecnicos. ");
@@ -147,7 +145,7 @@ void menuTecnicos(Tecnico *t){
 void menuAtendimentos(Atendimento *a){
     int op;
 
-    do{
+    do {
         printf("\n=================== Atendimentos ====================");
         printf("\n [1] - Abrir chamado de atendimento. ");
         printf("\n [2] - Apresentar todos os chamados. ");
@@ -190,7 +188,7 @@ int main(){
     Tecnico t;
     Atendimento a;
 
-    do{
+    do {
         opt = menuGeral();
         
         switch (opt) {

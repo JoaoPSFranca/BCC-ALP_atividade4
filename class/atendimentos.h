@@ -19,16 +19,16 @@ Atendimento lerAtendimento(){
     int dia2, mes2, posicao=0, pront, verificarCodigo, verificarProntuario, nr_equipamento;
 
     printf("\nA seguir, insira as informacoes para cadastrar um atendimento: \n");
-    do{
+    do {
         printf(" Dia: ");
         scanf("%d", &dia2);
 
         if(dia2 < 1 || dia2 > 31)
             printf("\nDia invalido! Tente novamente.\n");
-    }while(dia2 < 1 || dia2 > 31);
+    } while(dia2 < 1 || dia2 > 31);
     atendimento.dia = dia2;
 
-    do{
+    do {
         printf(" Mes: ");
         scanf("%d", &mes2);
 
@@ -37,9 +37,8 @@ Atendimento lerAtendimento(){
     } while(mes2 < 1 || mes2 > 12);
     atendimento.mes = mes2;
 
-    do{
-        do
-        {
+    do {
+        do {
             printf(" Equipamento: ");
             scanf("%d", &nr_equipamento);
 
@@ -58,10 +57,8 @@ Atendimento lerAtendimento(){
         imprimirProntuario();
     printf("\n======================================================\n");
 
-    do
-    {
-        do
-        {
+    do {
+        do {
             printf("\n Insira o protuario de um tecnico disponivel: ");
             scanf("%d", &pront);
 
@@ -134,11 +131,9 @@ void todosAtendimentos(){
     file = fopen("atendimentos.dat", "rb");// ler arquivo binario
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em todosAtendimentos.\n");
-    else
-    {
+    else {
         fread(&a, sizeof(Atendimento), 1, file);
-        while(!feof(file))
-        {
+        while(!feof(file)) {
             imprimirAtendimento(a);
             fread(&a, sizeof(Atendimento), 1, file);
         }
@@ -154,10 +149,8 @@ int pegarPront(){
     imprimirProntuario();
     printf("\n======================================================\n");
 
-    do
-    {
-        do
-        {
+    do {
+        do {
             printf("\n Insira o protuario do tecnico que deseja procurar: ");
             scanf("%d", &pront);
 
@@ -182,7 +175,7 @@ void atendimentoTecnico(){
     file = fopen("atendimentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoTecnico.\n");
-    else{
+    else {
 
         pront = pegarPront();
 
@@ -209,13 +202,13 @@ void atendimentoLab(){
     file = fopen("atendimentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoLab.\n");
-    else{
+    else {
 
         printf("\n====================== Laboratorios ==================");
         imprimirLaboratorios();
         printf("\n======================================================\n");
 
-        do{
+        do {
             do {
                 printf("\n Insira o laboratorio que deseja procurar: ");
                 scanf("%d", &lab);
@@ -231,7 +224,7 @@ void atendimentoLab(){
         } while (verificar == 0);
 
         fread(&a, sizeof(Atendimento), 1, file);
-        while(!feof(file)){
+        while(!feof(file)) {
             int posicao = localizarEquipamento(a.cod_equip);
             Equipamento e = getEquipamento(posicao);
             
@@ -262,10 +255,8 @@ int verificarCodigoEquipamento(){
     imprimirCodigoEquipamento();
     printf("\n======================================================\n");
 
-    do
-    {
-        do
-        {
+    do {
+        do {
             printf("\n Insira o Equipamento que deseja procurar: ");
             scanf("%d", &codigo);
 
@@ -291,11 +282,11 @@ void atendimentoEquipamento(){
     file = fopen("atendimentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoEquipamento.\n");
-    else{
+    else {
 
         codigo = verificarCodigoEquipamento();
         fread(&a, sizeof(Atendimento), 1, file);
-        while(!feof(file)){
+        while(!feof(file)) {
             int posicao = localizarEquipamento(a.cod_equip);
             Equipamento e = getEquipamento(posicao);
             
@@ -319,8 +310,7 @@ void atendimentoEquipamento(){
 //Apresentar as manutenções realizadas em um determinado mês;
 void manutencaoMes(){
     int mes = 0;
-    do
-    {
+    do {
         printf("\n Insira o mes que deseja procurar: ");
         scanf("%d", &mes);
 
@@ -339,11 +329,9 @@ void verificarMes(int mes){
     file = fopen("atendimentos.dat", "rb");
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em verificarMes.\n");
-    else
-    {
+    else {
         fread(&a, sizeof(Atendimento), 1, file);
-        while(!feof(file))
-        {
+        while(!feof(file)) {
             if(a.mes == mes){
                 imprimirAtendimento(a);
                 verifica = 1;
@@ -369,8 +357,7 @@ void finalizarAtendimento() {
     file = fopen("atendimentos.dat", "rb");
     if (file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em finalizarAtendimento.\n");
-    else
-    {
+    else {
         codigo = verificarCodigoEquipamento();
         
         fread(&a, sizeof(Atendimento), 1, file);
@@ -381,8 +368,7 @@ void finalizarAtendimento() {
         }
 
         printf("\n A seguir, digite as informacoes do atendimento que deseja finalizar: ");
-        do
-        {
+        do {
             printf("\n Dia: ");
             scanf("%d", &dia);
 
@@ -390,8 +376,7 @@ void finalizarAtendimento() {
                 printf("\nDia invalido! Tente novamente.\n");
         } while (dia < 1 || dia > 31);
 
-        do
-        {
+        do {
             printf(" Mes: ");
             scanf("%d", &mes);
 
@@ -400,8 +385,7 @@ void finalizarAtendimento() {
         } while (mes < 1 || mes > 12);
 
      fread(&a, sizeof(Atendimento), 1, file);
-        while(!feof(file))
-        {
+        while(!feof(file)) {
             if(a.dia == dia && a.mes == mes){
                 a.situ == 'F';
                 verifica = 1;
