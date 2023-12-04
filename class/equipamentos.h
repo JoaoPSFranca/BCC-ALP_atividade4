@@ -279,3 +279,22 @@ void imprimirCodigoEquipamento(){
         fclose(file);
     }
 }
+
+void imprimirCodigoEquipamentoManutencao(){
+    FILE *file;
+    Equipamento e;
+
+    file = fopen("equipamentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirCodigoEquipamentoManutencao.\n");
+    else {
+        fread(&e, sizeof(Equipamento), 1, file);
+        while(!feof(file)) {
+            if (e.situacao == 'M')
+                printf("\n Numero do Equipamento: %d  ", e.num);
+
+            fread(&e, sizeof(Equipamento), 1, file);
+        }
+        fclose(file);
+    }
+}

@@ -4,7 +4,6 @@
 #include "./class/tecnicos.h"
 #include "./class/atendimentos.h"
 
-//teste
 void switchEquipamento(int op, Equipamento *e){
     switch(op) {
         case 0:
@@ -145,7 +144,7 @@ void menuAtendimentos(Atendimento *a){
     int op;
 
     do {
-        printf("\n=================== Atendimentos ====================");
+        printf("\n==================== Atendimentos ====================");
         printf("\n [1] - Abrir chamado de atendimento. ");
         printf("\n [2] - Apresentar todos os chamados. ");
         printf("\n [3] - Apresentar chamados de um tecnico especifico. ");
@@ -154,7 +153,7 @@ void menuAtendimentos(Atendimento *a){
         printf("\n [6] - Apresentar chamados de um mes especifico. ");
         printf("\n [7] - Finalizar chamados de um equipamento especifico. ");
         printf("\n [0] - Voltar. ");
-        printf("\n=====================================================\n");
+        printf("\n======================================================\n");
 
         printf("\n Insira a opcao desejada: ");
         scanf("%d", &op);
