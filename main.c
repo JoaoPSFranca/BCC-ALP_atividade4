@@ -16,9 +16,15 @@ void switchEquipamento(int op, Equipamento *e){
             break;
         case 2:
             if (sizeof(Equipamento) == 0)
-                printf("\nPor favor inserir um Tecnico antes. ");
+                printf("\nPor favor inserir um Equipamento antes. ");
             else
                 todosEquipamentos();
+            break;
+        case 3:
+            if (sizeof(Equipamento) == 0)
+                printf("\nPor favor inserir um Equipamento antes. ");
+            else
+                apresentarEquipamentoManutencao();
             break;
         default:
             printf("\n Por favor inserir uma opcao valida. \n");
@@ -77,6 +83,24 @@ void switchAtendimento(int op, Atendimento *a){
             else
                 atendimentoLab();
             break;
+        case 5:
+            if (sizeof(Atendimento) == 0)
+                printf("\nNenhum atendimento cadastrado. ");
+            else
+                atendimentoEquipamento();
+            break;
+        case 6:
+            if (sizeof(Atendimento) == 0)
+                printf("\nNenhum atendimento cadastrado. ");
+            else
+                manutencaoMes();
+            break;
+        case 7:
+            if (sizeof(Atendimento) == 0)
+                printf("\nNenhum atendimento cadastrado. ");
+            else
+               finalizarAtendimento();
+            break;
         default:
             printf("\n Por favor inserir uma opcao valida. \n");
             break;
@@ -90,6 +114,7 @@ void menuEquipamentos(Equipamento *e){
         printf("\n==================== Equipamentos ====================");
         printf("\n [1] - Incluir novo equipamento. ");
         printf("\n [2] - Apresentar todos os equipamentos. ");
+        printf("\n [3] - Apresentar todos os equipamentos em manutencao. ");
         printf("\n [0] - Voltar. ");
         printf("\n======================================================\n");
 
@@ -128,6 +153,9 @@ void menuAtendimentos(Atendimento *a){
         printf("\n [2] - Apresentar todos os chamados. ");
         printf("\n [3] - Apresentar chamados de um tecnico especifico. ");
         printf("\n [4] - Apresentar chamados de um laboratorio especifico. ");
+        printf("\n [5] - Apresentar chamados de um equipamento especifico. ");
+        printf("\n [6] - Apresentar chamados de um mes especifico. ");
+        printf("\n [7] - Finalizar chamados de um equipamento especifico. ");
         printf("\n [0] - Voltar. ");
         printf("\n=====================================================\n");
 

@@ -202,7 +202,7 @@ void sobreescreverSituacaoEquipamento(Equipamento e, int posicao){
 
 }
 
-void alterarSituacaoEquipamento(int posicao){
+void alterarSituacaoEquipamento(int posicao, int codigo){
     FILE *file;
     Equipamento e;
 
@@ -218,7 +218,12 @@ void alterarSituacaoEquipamento(int posicao){
         fread(&e, sizeof(Equipamento), 1, file);
 
         // mudando situacao do equipamento
-        e.situacao = 'M';
+        if(codigo == 0)
+            e.situacao = 'M';
+            printf("\nA situacao do equipamento foi modificada para 'MANUTENCAO'");
+        else
+            e.situacao = 'F';
+            printf("\nA situacao do equipamento foi modificada para 'FUNCIONANDO'");
 
         // reposiciono no registro correto
         fseek(file, posicao*sizeof(Equipamento), SEEK_SET);
@@ -226,7 +231,28 @@ void alterarSituacaoEquipamento(int posicao){
         // regravo o registro
         fwrite(&e, sizeof(Equipamento), 1, file);
 
-        printf("\nA situacao do equipamento foi modificada para 'MANUTENCAO'");
+        fclose(file);
+    }
+}
+
+void imprimirLaboratorios(){
+    FILE *file;
+    Equipamento e;
+
+    file = fopen("equipamentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirLaboratorios.\n");
+    else
+    {
+        fread(&e, sizeof(Equipamento), 1, file);
+        while(!feof(file))
+        {
+            if(fread(&e, sizeof(Equipamento), 1, file) != (fread(&e, sizeof(Equipamento), 1, file)+1)){
+                printf("\n Num. Laboratorio: %d", e.num_lab);
+            }
+            
+            fread(&e, sizeof(Equipamento), 1, file);
+        }
 
         fclose(file);
     }
@@ -241,6 +267,7 @@ int verificarLaboratorios(int lab){
     if(file == NULL)
         printf("\nNao foi possivel abrir 'equipamentos.dat' em verificarLaboratorios.\n");
     else{
+
         fread(&e, sizeof(Equipamento), 1, file);
 
         while(!feof(file) && verificar == 0)
@@ -253,4 +280,53 @@ int verificarLaboratorios(int lab){
     }
 
     return verificar;
+}
+
+void apresentarEquipamentoManutencao(){
+    FILE *file;
+    Equipamento e;
+    int verifica;
+
+    file = fopen("equipamentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em apresentarEquipamentoManutencao.\n");
+    else
+    {
+        fread(&e, sizeof(Equipamento), 1, file);
+        while(!feof(file))
+        {
+            if(e.situacao == 'M'){
+                imprimirEquipamentos(e);
+                verifica = 1;
+            }
+            
+            if (verifica == 0)
+                printf("\n Nenhum chamado realizado no mes especificado. \n");
+            fread(&e, sizeof(Equipamento), 1, file);
+        }
+
+        fclose(file);
+    }
+}
+
+void imprimirCodigoEquipamento(){
+    FILE *file;
+    Equipamento e;
+
+    file = fopen("equipamentos.dat", "rb");
+    if(file == NULL)
+        printf("\nNao foi possivel abrir 'equipamentos.dat' em imprimirEquipamentoManutencao.\n");
+    else
+    {
+        fread(&e, sizeof(Equipamento), 1, file);
+        while(!feof(file))
+        {
+            
+            printf("\n Numero do Equipamento: %d  ", e.num);
+            
+            fread(&e, sizeof(Equipamento), 1, file);
+        }
+
+        fclose(file);
+    }
 }
