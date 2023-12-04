@@ -176,14 +176,13 @@ void atendimentoTecnico(){
     if(file == NULL)
         printf("\nNao foi possivel abrir 'atendimentos.dat' em atendimentoTecnico.\n");
     else {
-
         pront = pegarPront();
 
         fread(&a, sizeof(Atendimento), 1, file);
         while(!feof(file)){
             if(a.pront_tec == pront)
                 imprimirAtendimento(a);
-            else
+
             fread(&a, sizeof(Atendimento), 1, file);
         }
 
