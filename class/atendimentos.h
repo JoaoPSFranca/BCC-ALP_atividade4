@@ -248,7 +248,6 @@ void atendimentoLab(){
 int verificarCodigoEquipamento(){
     int
         codigo = 0,
-        cont = 0,
         verificar = 0;
 
     printf("\n====================== Equipamentos ==================");
@@ -307,20 +306,6 @@ void atendimentoEquipamento(){
     }
 }
 
-//Apresentar as manutenções realizadas em um determinado mês;
-void manutencaoMes(){
-    int mes = 0;
-    do {
-        printf("\n Insira o mes que deseja procurar: ");
-        scanf("%d", &mes);
-
-        if (mes < 1 || mes > 12)
-            printf("\nMes invalido! Tente novamente.\n");
-    } while (mes < 1 || mes > 12);
-
-    verificarMes(mes);
-}
-
 void verificarMes(int mes){
     FILE *file;
     Atendimento a;
@@ -344,6 +329,20 @@ void verificarMes(int mes){
             
         fclose(file);
     }
+}
+
+//Apresentar as manutenções realizadas em um determinado mês;
+void manutencaoMes(){
+    int mes = 0;
+    do {
+        printf("\n Insira o mes que deseja procurar: ");
+        scanf("%d", &mes);
+
+        if (mes < 1 || mes > 12)
+            printf("\nMes invalido! Tente novamente.\n");
+    } while (mes < 1 || mes > 12);
+
+    verificarMes(mes);
 }
 
 void finalizarAtendimento() {
@@ -387,7 +386,7 @@ void finalizarAtendimento() {
      fread(&a, sizeof(Atendimento), 1, file);
         while(!feof(file)) {
             if(a.dia == dia && a.mes == mes){
-                a.situ == 'F';
+                a.situ = 'F';
                 verifica = 1;
             }
             
